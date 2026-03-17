@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 240 5% 85%;
+
+    --card: 240 10% 6%;
+    --card-foreground: 240 5% 85%;
+
+    --popover: 240 10% 6%;
+    --popover-foreground: 240 5% 85%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 15%;
+    --secondary-foreground: 240 5% 85%;
+
+    --muted: 240 5% 12%;
+    --muted-foreground: 240 5% 45%;
+
+    --accent: 142 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+
+    --border: 240 5% 15%;
+    --input: 240 5% 15%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    --surface: 240 10% 6%;
+    --surface-elevated: 240 10% 8%;
+
+    --sidebar-background: 240 10% 5%;
+    --sidebar-foreground: 240 5% 85%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 12%;
+    --sidebar-accent-foreground: 240 5% 85%;
+    --sidebar-border: 240 5% 15%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum';
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply bg-card rounded-2xl;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .surface-metric {
+    @apply bg-muted/50 rounded-xl p-4;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  .panel-block {
+    @apply rounded-xl border border-border bg-background/70 p-4;
+  }
+
+  .surface-panel {
+    @apply rounded-2xl border border-border bg-background/60;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  .nav-rail-item {
+    @apply flex w-full items-start gap-3 rounded-xl border border-transparent px-3 py-3 transition-all hover:bg-secondary/70;
+  }
+
+  .nav-rail-item-active {
+    @apply border-border bg-secondary/80;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15);
+  }
+
+  .chart-nav-panel {
+    @apply rounded-2xl border border-border bg-background/50 p-3;
+  }
+
+  .chart-nav-item {
+    @apply flex w-full items-start gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition-all hover:bg-secondary/60;
+  }
+
+  .chart-nav-item-active {
+    @apply border-border bg-secondary/80;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.18);
+  }
+
+  .input-range {
+    @apply w-full h-1.5 bg-secondary rounded-lg appearance-none cursor-pointer;
+  }
+
+  .input-range::-webkit-slider-thumb {
+    @apply appearance-none w-4 h-4 rounded-full bg-primary cursor-pointer;
+    box-shadow: 0 0 8px hsl(217 91% 60% / 0.5);
+  }
+
+  .btn-simulate {
+    @apply w-full py-3 bg-primary hover:brightness-110 text-primary-foreground rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 rounded-lg text-sm transition-colors text-foreground;
+  }
+
+  .label-uppercase {
+    @apply text-[10px] uppercase tracking-widest text-muted-foreground font-bold;
+  }
+
+  .status-live {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg text-sm border;
+    background: hsl(217 91% 60% / 0.1);
+    color: hsl(217 91% 60%);
+    border-color: hsl(217 91% 60% / 0.2);
+  }
+
+  .alert-warning {
+    @apply flex gap-2 text-xs p-2 rounded border;
+    color: hsl(38 92% 50%);
+    background: hsl(38 92% 50% / 0.05);
+    border-color: hsl(38 92% 50% / 0.2);
+  }
+
+  .header-ict-logo {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-ict-ring {
+    position: relative;
+    border-radius: 999px;
+    border: 1px solid rgba(87, 168, 255, 0.16);
+    background: radial-gradient(circle, rgba(27, 70, 117, 0.18), transparent 70%);
+  }
+
+  .header-ict-ring-one {
+    position: absolute;
+    inset: 0;
+    animation: ict-spin 14s linear infinite;
+  }
+
+  .header-ict-ring-two {
+    position: absolute;
+    inset: 8px;
+    animation: ict-spin-reverse 11s linear infinite;
+  }
+
+  .header-ict-core {
+    position: relative;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: hsl(0 0% 100%);
+    background: linear-gradient(135deg, hsl(217 91% 60%), hsl(190 80% 46%));
+    box-shadow: 0 0 18px rgba(44, 162, 255, 0.25);
+  }
+
+  @keyframes ict-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes ict-spin-reverse {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+}
