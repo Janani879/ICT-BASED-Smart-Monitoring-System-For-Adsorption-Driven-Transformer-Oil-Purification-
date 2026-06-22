@@ -1,4 +1,4 @@
-import { Activity, BarChart3, Gauge, SlidersHorizontal } from "lucide-react";
+import { Activity, Layers } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 
 const navItems: Array<{
@@ -9,32 +9,32 @@ const navItems: Array<{
   icon: typeof Activity;
 }> = [
   {
-    id: "overview",
-    label: "Overview",
-    description: "System status and interpretation",
-    to: "/overview",
+    id: "ohi",
+    label: "Oil Health Index",
+    description: "Calculator and diagnostics",
+    to: "/ohi",
     icon: Activity,
   },
   {
-    id: "controls",
-    label: "Controls",
-    description: "Simulation parameters",
-    to: "/controls",
-    icon: SlidersHorizontal,
+    id: "tab2",
+    label: "DGA Fault Analysis",
+    description: "Dissolved Gas Analysis",
+    to: "/tab2",
+    icon: Layers,
   },
   {
-    id: "metrics",
-    label: "Metrics",
-    description: "Model outputs and gauge",
-    to: "/metrics",
-    icon: Gauge,
+    id: "tab3",
+    label: "Tab 3",
+    description: "Feature coming soon",
+    to: "/tab3",
+    icon: Layers,
   },
   {
-    id: "visuals",
-    label: "Visuals",
-    description: "Charts and process trends",
-    to: "/visuals",
-    icon: BarChart3,
+    id: "tab4",
+    label: "Tab 4",
+    description: "Feature coming soon",
+    to: "/tab4",
+    icon: Layers,
   },
 ];
 
