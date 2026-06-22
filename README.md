@@ -1,164 +1,344 @@
-Design of an ICT-Based Smart Monitoring and Predictive System for Adsorption-Driven Transformer Oil Purification
-📌 Overview
+# Smart Transformer Oil Purification Platform
 
-Transformer oil plays a critical role in electrical power transformers by providing insulation and cooling. Over time, contaminants such as moisture, oxidation products, and dissolved impurities degrade oil quality, reducing transformer efficiency and lifespan.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![IoT](https://img.shields.io/badge/IoT-Enabled-green)
+![Machine Learning](https://img.shields.io/badge/ML-Predictive-orange)
+![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-red)
 
-This project proposes an ICT-Based Smart Monitoring and Predictive System that combines adsorption-based purification, IoT-enabled monitoring, and Machine Learning analytics to improve transformer oil purification processes. The system continuously monitors operational parameters, predicts adsorption efficiency, and provides intelligent insights for process optimization.
+An ICT-based intelligent monitoring and predictive analytics platform for adsorption-driven transformer oil purification. The system combines adsorption experiments, IoT sensor monitoring, machine learning prediction, and real-time dashboards to optimize transformer oil purification performance.
 
-🎯 Objectives
-Investigate adsorption-based purification of contaminated transformer oil using Fuller Earth as an adsorbent.
-Quantitatively analyze contaminant concentration before and after adsorption using High Performance Liquid Chromatography (HPLC).
-Develop an IoT-based monitoring system for real-time process tracking.
-Build a Machine Learning-powered dashboard to predict adsorption efficiency and purification performance.
-🏗️ System Architecture
+The platform demonstrates a complete cyber-physical monitoring loop:
+
+```text
 Transformer Oil Sample
-          │
-          ▼
-Initial Oil Analysis (HPLC)
-          │
-          ▼
-Adsorption Purification Process
-          │
-          ▼
-IoT Sensors
-(Temperature, pH, Turbidity, TDS)
-          │
-          ▼
-Microcontroller & Data Acquisition
-          │
-          ▼
+        ->
+Adsorption Purification Reactor
+        ->
+IoT Sensors (Temperature, pH, Turbidity, TDS)
+        ->
+Data Acquisition System
+        ->
 Cloud / Database Storage
-          │
-          ▼
-Data Processing & Preprocessing
-          │
-          ▼
-Machine Learning Model
-          │
-          ▼
-Prediction Module
-          │
-          ▼
-Smart Monitoring Dashboard
-          │
-          ▼
+        ->
+Machine Learning Prediction Engine
+        ->
+Smart Dashboard
+        ->
 Decision Support System
-          │
-          ▼
-Purified Transformer Oil
-🔬 Methodology
-1. Transformer Oil Collection
+        ->
+Optimized Transformer Oil Purification
+```
 
-Transformer oil samples are collected from operating power transformers.
+## Problem Statement
 
-2. Initial Oil Analysis
+Transformer oil is critical for insulation and cooling in power transformers. During operation, contaminants such as moisture, oxidation products, and dissolved impurities accumulate in the oil, reducing dielectric strength and overall transformer reliability.
 
-Chemical characterization is performed using HPLC to determine contaminant concentrations.
+Traditional purification approaches focus primarily on laboratory testing and post-process analysis. Operators often lack real-time visibility into adsorption performance and contaminant removal efficiency.
 
-3. Adsorption-Based Purification
+This project addresses that challenge by integrating adsorption experiments, IoT-based sensing, and machine learning to create an intelligent monitoring and predictive platform.
 
-Contaminated oil is treated using Fuller Earth in a batch adsorption reactor.
+## Research Motivation
 
-4. Real-Time Monitoring
+Current transformer oil purification systems typically answer:
 
-Sensors continuously monitor:
+```text
+Was the oil purified successfully after the experiment?
+```
 
-Temperature
-Turbidity
-Total Dissolved Solids (TDS)
-pH
-5. Data Acquisition & Transmission
+This project answers:
 
-Sensor data is transmitted through an IoT platform to a cloud database.
+```text
+Can adsorption performance be monitored,
+predicted, and optimized in real time?
+```
 
-6. Data Processing
+## Architecture
 
-Collected data is cleaned, normalized, and prepared for analysis.
+```text
++--------------------+
+| Transformer Oil    |
+| Sample Collection  |
++---------+----------+
+          |
+          v
++--------------------+
+| Initial Oil        |
+| Analysis (HPLC)    |
++---------+----------+
+          |
+          v
++--------------------+
+| Adsorption Reactor |
+| Fuller Earth       |
++---------+----------+
+          |
+          v
++--------------------+
+| IoT Sensors        |
+| Temp / pH / TDS    |
+| Turbidity          |
++---------+----------+
+          |
+          v
++--------------------+
+| Data Acquisition   |
+| Microcontroller    |
++---------+----------+
+          |
+          v
++--------------------+
+| Cloud Database     |
+| MySQL              |
++---------+----------+
+          |
+          v
++--------------------+
+| Data Processing    |
+| Pandas             |
++---------+----------+
+          |
+          v
++--------------------+
+| Machine Learning   |
+| Prediction Engine  |
++---------+----------+
+          |
+          v
++--------------------+
+| Streamlit          |
+| Dashboard          |
++---------+----------+
+          |
+          v
++--------------------+
+| Decision Support   |
+| Recommendations    |
++--------------------+
+```
 
-7. Machine Learning Prediction
+## Objectives
 
-Models analyze process behavior and predict:
+1. Investigate adsorption-based purification of transformer oil using Fuller Earth.
+2. Quantify contaminant concentration using HPLC analysis.
+3. Develop an IoT monitoring platform for real-time adsorption tracking.
+4. Build machine learning models for adsorption efficiency prediction.
+5. Create an intelligent dashboard for monitoring and decision support.
 
-Adsorption efficiency
-Contaminant removal percentage
-Adsorption capacity
-Purification performance
-8. Dashboard Visualization
+## Key Features
 
-A Streamlit-based dashboard provides:
+### Real-Time Monitoring
 
-Real-time monitoring
-Adsorption curves
-Efficiency predictions
-Alert generation
-Decision support recommendations
-🧠 Machine Learning Features
+The system continuously monitors:
 
-The predictive analytics module is designed to:
+* Temperature
+* pH
+* TDS
+* Turbidity
 
-Predict adsorption efficiency in real time.
-Estimate contaminant removal performance.
-Identify adsorption trends.
-Generate maintenance recommendations.
-Support intelligent decision-making for transformer oil purification.
-Potential Algorithms
-Random Forest Regressor
-Neural Networks
-Gradient Boosting
-Support Vector Regression
-📊 Adsorption Modeling
+### Adsorption Analytics
 
-The system evaluates adsorption behavior using:
+The platform evaluates adsorption behavior using:
 
-Langmuir Isotherm
+* Langmuir Adsorption Isotherm
+* Freundlich Adsorption Isotherm
 
-Assumes monolayer adsorption on a homogeneous surface.
+### Predictive Intelligence
 
-Freundlich Isotherm
+Machine learning models estimate:
 
-Assumes multilayer adsorption on heterogeneous surfaces.
+* Adsorption Efficiency
+* Contaminant Removal
+* Purification Performance
+* Adsorption Capacity
 
-The platform can automatically determine the best-fitting adsorption model using experimental data.
+### Smart Dashboard
 
-🛠️ Technology Stack
-Programming
-Python
-Machine Learning
-Scikit-learn
-TensorFlow
-Data Analysis
-Pandas
-Matplotlib
-Database
-MySQL
-Dashboard
-Streamlit
-IoT & Communication
-Sensors
-Microcontroller Platform
-Cloud Connectivity
-🔧 Hardware Requirements
-Batch Adsorption Reactor
-Fuller Earth Adsorbent
-Temperature Sensor
-Turbidity Sensor
-TDS Sensor
-pH Probe
-Magnetic Stirrer
-HPLC System
-🌐 Interdisciplinary Contributions
-Chemical Engineering
-Adsorption processes
-Isotherm modeling
-Oil purification techniques
-Electrical Engineering
-Transformer operation
-Transformer oil quality management
-Computer Science & Data Science
-Machine learning models
-Data analytics
-Predictive monitoring systems
-IoT & Instrumentation
-Sensor integration
-Real-time data acquisition
-Cloud-based monitoring
+Provides:
+
+* Real-Time Sensor Monitoring
+* Adsorption Curves
+* Performance Predictions
+* System Alerts
+* Maintenance Recommendations
+
+## Technology Stack
+
+| Component            | Technology   |
+| -------------------- | ------------ |
+| Programming Language | Python       |
+| Machine Learning     | Scikit-Learn |
+| Deep Learning        | TensorFlow   |
+| Data Analysis        | Pandas       |
+| Visualization        | Matplotlib   |
+| Dashboard            | Streamlit    |
+| Database             | MySQL        |
+
+## Hardware Requirements
+
+| Component                |
+| ------------------------ |
+| Batch Adsorption Reactor |
+| Fuller Earth Adsorbent   |
+| Temperature Sensor       |
+| TDS Sensor               |
+| Turbidity Sensor         |
+| pH Probe                 |
+| Magnetic Stirrer         |
+| HPLC System              |
+
+## Project Structure
+
+```text
+smart-transformer-oil-purification/
+│
+├── data/
+├── models/
+├── dashboard/
+├── sensors/
+├── notebooks/
+├── docs/
+│   └── images/
+├── README.md
+├── requirements.txt
+└── app.py
+```
+
+## Machine Learning Pipeline
+
+### Input Features
+
+* Temperature
+* pH
+* TDS
+* Turbidity
+* Adsorbent Dosage
+* Contact Time
+* Initial Contaminant Concentration
+
+### Output Predictions
+
+* Adsorption Efficiency (%)
+* Contaminant Removal (%)
+* Adsorption Capacity
+* Recommended Operating Conditions
+
+### Candidate Models
+
+* Random Forest Regressor
+* Gradient Boosting Regressor
+* Support Vector Regression
+* Neural Networks
+
+## Adsorption Isotherm Module
+
+The platform automatically determines the most suitable adsorption model.
+
+### Langmuir Model
+
+Assumes:
+
+* Monolayer adsorption
+* Homogeneous surface adsorption
+
+### Freundlich Model
+
+Assumes:
+
+* Multilayer adsorption
+* Heterogeneous surface adsorption
+
+The system compares model performance and recommends the best-fitting adsorption isotherm.
+
+## Interdisciplinary Contributions
+
+### Chemical Engineering
+
+* Adsorption Processes
+* Adsorption Isotherm Analysis
+* Transformer Oil Purification
+
+### Electrical Engineering
+
+* Transformer Operation
+* Insulation and Cooling Systems
+* Transformer Oil Quality Assessment
+
+### Computer Science & Data Science
+
+* Machine Learning
+* Predictive Analytics
+* Dashboard Development
+* Data Processing
+
+### IoT & Instrumentation
+
+* Sensor Integration
+* Real-Time Monitoring
+* Data Acquisition Systems
+
+## Innovation
+
+The major innovation of this project is the integration of:
+
+```text
+Adsorption Experiments
++
+IoT Monitoring
++
+Machine Learning Prediction
++
+Automated Isotherm Identification
+```
+
+into a single intelligent monitoring framework.
+
+Unlike traditional transformer oil purification approaches that rely on manual laboratory analysis, the proposed platform provides:
+
+* Continuous Monitoring
+* Predictive Analytics
+* Automated Adsorption Model Selection
+* Real-Time Decision Support
+* Smart Maintenance Recommendations
+
+## Expected Outcomes
+
+* Improved Transformer Oil Purification Efficiency
+* Reduced Maintenance Costs
+* Enhanced Transformer Reliability
+* Real-Time Process Visibility
+* Data-Driven Process Optimization
+* Predictive Maintenance Support
+
+## Future Work
+
+* Edge AI Deployment for On-Device Predictions
+* Cloud-Based Monitoring Platform
+* Predictive Maintenance Alerts
+* Digital Twin of Adsorption Process
+* Explainable AI for Adsorption Prediction
+* Industrial Scale Deployment
+
+## Team
+
+### Project Title
+
+**Design of an ICT-Based Smart Monitoring and Predictive System for Adsorption-Driven Transformer Oil Purification**
+
+### Team Members
+
+| Name                  | Department           |
+| --------------------- | -------------------- |
+| Supreet Naik          | Chemical Engineering |
+| Sriprada Ramesh       | Chemical Engineering |
+| Janani S              | CSE (Data Science)   |
+| Pravalika Nagappagari | CSE (Data Science)   |
+
+### Guide
+
+**Dr. C. Suresha**
+Assistant Professor
+Department of Electrical and Electronics Engineering
+
+## One-Line Explanation
+
+A smart IoT and machine learning platform that predicts adsorption performance and optimizes transformer oil purification through real-time monitoring, automated isotherm analysis, and predictive analytics.
