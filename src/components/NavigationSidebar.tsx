@@ -24,15 +24,15 @@ const navItems: Array<{
   },
   {
     id: "tab3",
-    label: "Tab 3",
-    description: "Feature coming soon",
+    label: "Live Monitoring",
+    description: "ESP32 sensor trends",
     to: "/tab3",
     icon: Layers,
   },
   {
     id: "tab4",
-    label: "Tab 4",
-    description: "Feature coming soon",
+    label: "Summary",
+    description: "All results overview",
     to: "/tab4",
     icon: Layers,
   },
@@ -77,3 +77,4 @@ const NavigationSidebar = () => {
 };
 
 export default NavigationSidebar;
+

@@ -290,6 +290,46 @@ const OilHealthIndexPage = () => {
             </button>
           </div>
         </div>
+
+        <div className="surface-card p-6 space-y-4">
+          <div className="flex items-center gap-3 border-b border-border pb-4">
+            <AlertCircle size={20} className="text-primary" />
+            <div>
+              <h2 className="text-base font-semibold text-foreground">What is Oil Health Index?</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">A single 0-100 score for transformer oil condition</p>
+            </div>
+          </div>
+
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Oil Health Index combines chemical, physical, and optical indicators into one condition score. A higher score means the oil is cleaner, less acidic, and better able to support transformer insulation and cooling.
+          </p>
+
+          <div className="grid grid-cols-1 gap-3 text-xs">
+            <div className="surface-panel p-3">
+              <span className="label-uppercase block mb-1">TAN</span>
+              <p className="text-muted-foreground">Measures acidity. Higher TAN means oxidation and ageing products are increasing.</p>
+            </div>
+            <div className="surface-panel p-3">
+              <span className="label-uppercase block mb-1">Viscosity</span>
+              <p className="text-muted-foreground">Represents oil flow quality. Poor viscosity can reduce cooling performance.</p>
+            </div>
+            <div className="surface-panel p-3">
+              <span className="label-uppercase block mb-1">Transmission</span>
+              <p className="text-muted-foreground">Represents optical clarity. Lower transmission indicates contamination or darkened oil.</p>
+            </div>
+          </div>
+
+          <div className="surface-panel p-3 text-xs text-muted-foreground font-mono leading-relaxed">
+            OHI = 0.45*S_TAN + 0.20*S_viscosity + 0.35*S_optical
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground">
+            <div><b className="text-foreground">80-100:</b> Excellent</div>
+            <div><b className="text-foreground">60-79:</b> Good</div>
+            <div><b className="text-foreground">40-59:</b> Moderate</div>
+            <div><b className="text-foreground">0-39:</b> Poor/Critical</div>
+          </div>
+        </div>
       </div>
 
       {/* Right Column: Visualization & Detailed results */}
@@ -429,3 +469,5 @@ const OilHealthIndexPage = () => {
 };
 
 export default OilHealthIndexPage;
+
+

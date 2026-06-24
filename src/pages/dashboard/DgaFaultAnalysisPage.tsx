@@ -17,7 +17,8 @@ import {
   ChevronUp,
   Bot,
   X,
-  MessageSquare
+  MessageSquare,
+  Calculator
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScatterChart, Scatter, XAxis, YAxis, Tooltip, Cell, ResponsiveContainer, Customized } from "recharts";
@@ -35,6 +36,10 @@ import {
   t2_poly,
   t3_poly,
   toCartesian,
+  safeDivide,
+  getRogersDiagnosis,
+  getIecDiagnosis,
+  getDuvalZone,
   parseCSVData,
   getSampleExplanation
 } from "@/lib/dga";
@@ -96,6 +101,72 @@ const DuvalTriangleBackground = (props: TriangleProps) => {
   );
 };
 
+type ManualGasKey = "h2" | "ch4" | "c2h6" | "c2h4" | "c2h2";
+
+type ManualGasInput = Record<ManualGasKey, string>;
+
+const manualGasFields: Array<{ key: ManualGasKey; label: string; gas: string }> = [
+  { key: "h2", label: "Hydrogen", gas: "H2" },
+  { key: "ch4", label: "Methane", gas: "CH4" },
+  { key: "c2h6", label: "Ethane", gas: "C2H6" },
+  { key: "c2h4", label: "Ethylene", gas: "C2H4" },
+  { key: "c2h2", label: "Acetylene", gas: "C2H2" },
+];
+
+const buildCalculatedSample = (values: ManualGasInput, sampleNum = 1): CalculatedSample | null => {
+  const h2 = Number(values.h2);
+  const ch4 = Number(values.ch4);
+  const c2h6 = Number(values.c2h6);
+  const c2h4 = Number(values.c2h4);
+  const c2h2 = Number(values.c2h2);
+
+  if (![h2, ch4, c2h6, c2h4, c2h2].every(Number.isFinite)) return null;
+  if ([h2, ch4, c2h6, c2h4, c2h2].some((value) => value < 0)) return null;
+
+  const r1 = safeDivide(ch4, h2);
+  const r2 = safeDivide(c2h6, ch4);
+  const r3 = safeDivide(c2h4, c2h6);
+  const r4 = safeDivide(c2h2, c2h4);
+  const rogersFault = getRogersDiagnosis(r1, r2, r3, r4);
+
+  const i1 = safeDivide(c2h2, c2h4);
+  const i2 = safeDivide(ch4, h2);
+  const i3 = safeDivide(c2h4, c2h6);
+  const iecFault = getIecDiagnosis(i1, i2, i3);
+
+  const sumDuval = ch4 + c2h4 + c2h2;
+  const pctCh4 = sumDuval > 0 ? (ch4 / sumDuval) * 100 : 0;
+  const pctC2h4 = sumDuval > 0 ? (c2h4 / sumDuval) * 100 : 0;
+  const pctC2h2 = sumDuval > 0 ? (c2h2 / sumDuval) * 100 : 0;
+  const duvalZone = getDuvalZone(pctCh4, pctC2h2, pctC2h4);
+  const coords = toCartesian(pctCh4, pctC2h2, pctC2h4);
+
+  return {
+    sampleNum,
+    h2,
+    ch4,
+    c2h6,
+    c2h4,
+    c2h2,
+    r1,
+    r2,
+    r3,
+    r4,
+    rogersFault,
+    i1,
+    i2,
+    i3,
+    iecFault,
+    sumDuval,
+    pctCh4,
+    pctC2h4,
+    pctC2h2,
+    duvalZone,
+    chartX: coords.x,
+    chartY: coords.y,
+  };
+};
+
 interface ChartTooltipProps {
   active?: boolean;
   payload?: Array<{ payload: { sampleNum: number; pctCh4: number; pctC2h4: number; pctC2h2: number; duvalZone: string } }>;
@@ -145,6 +216,13 @@ const DgaFaultAnalysisPage = () => {
   
   // Focus / highlight selected point
   const [selectedSampleNum, setSelectedSampleNum] = useState<number | null>(null);
+  const [manualGasValues, setManualGasValues] = useState<ManualGasInput>({
+    h2: "120",
+    ch4: "80",
+    c2h6: "35",
+    c2h4: "160",
+    c2h2: "18",
+  });
 
   // Local card explanation toggles
   const [rogersSimple, setRogersSimple] = useState(false);
@@ -161,6 +239,19 @@ const DgaFaultAnalysisPage = () => {
     { sender: 'assistant', text: "Hello! I am your Ask DGA Assistant. I help translate complex transformer diagnostics and thermodynamics into simple, everyday analogies." },
     { sender: 'assistant', text: "How can I help you today? Feel free to use one of the quick prompt buttons below!" }
   ]);
+
+  const manualSample = useMemo(() => buildCalculatedSample(manualGasValues, 1), [manualGasValues]);
+  const manualExplanation = useMemo(() => manualSample ? getSampleExplanation(manualSample) : null, [manualSample]);
+  const manualScatterPoint = useMemo(() => manualSample ? [{
+    x: manualSample.chartX,
+    y: manualSample.chartY,
+    sampleNum: manualSample.sampleNum,
+    pctCh4: manualSample.pctCh4,
+    pctC2h4: manualSample.pctC2h4,
+    pctC2h2: manualSample.pctC2h2,
+    duvalZone: manualSample.duvalZone,
+    color: zoneColors[manualSample.duvalZone],
+  }] : [], [manualSample]);
 
   // File drag & drop handlers
   const handleDrag = (e: React.DragEvent) => {
@@ -595,6 +686,99 @@ const DgaFaultAnalysisPage = () => {
             )}
           </div>
 
+
+          {/* Card 1B: Manual DGA Calculator */}
+          <div className="surface-card p-6 space-y-5">
+            <div className="flex items-center gap-3 border-b border-border pb-4">
+              <Calculator size={20} className="text-primary" />
+              <div>
+                <h2 className="text-base font-semibold text-foreground">Manual DGA Sample</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">Enter gas concentrations manually and view Rogers, IEC, and Duval results instantly</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {manualGasFields.map((field) => (
+                <label key={field.key} className="panel-block block space-y-2 p-3">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-muted-foreground uppercase font-bold tracking-wider">{field.gas}</span>
+                    <span className="text-primary font-bold">ppm</span>
+                  </div>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={manualGasValues[field.key]}
+                    onChange={(event) => setManualGasValues((current) => ({ ...current, [field.key]: event.target.value }))}
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground transition-all focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                    aria-label={`${field.label} concentration`}
+                  />
+                </label>
+              ))}
+            </div>
+
+            {manualSample && manualExplanation ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="surface-metric p-3 rounded-xl">
+                    <span className="label-uppercase text-[9px] block mb-1">Rogers Ratio</span>
+                    <strong className="text-sm text-foreground leading-snug">{manualSample.rogersFault}</strong>
+                  </div>
+                  <div className="surface-metric p-3 rounded-xl">
+                    <span className="label-uppercase text-[9px] block mb-1">IEC 60599</span>
+                    <strong className="text-sm text-foreground leading-snug">{manualSample.iecFault}</strong>
+                  </div>
+                  <div className="surface-metric p-3 rounded-xl">
+                    <span className="label-uppercase text-[9px] block mb-1">Duval Triangle</span>
+                    <strong className="text-sm leading-snug" style={{ color: zoneColors[manualSample.duvalZone] }}>
+                      {manualSample.duvalZone} - {zoneNames[manualSample.duvalZone]}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <div className="surface-panel p-3 space-y-2 text-[10px] text-muted-foreground">
+                    <div className="font-mono grid grid-cols-2 gap-x-3 gap-y-1">
+                      <span>R1 CH4/H2</span><b className="text-foreground text-right">{manualSample.h2 === 0 ? "N/A" : manualSample.r1.toFixed(3)}</b>
+                      <span>R2 C2H6/CH4</span><b className="text-foreground text-right">{manualSample.ch4 === 0 ? "N/A" : manualSample.r2.toFixed(3)}</b>
+                      <span>R3 C2H4/C2H6</span><b className="text-foreground text-right">{manualSample.c2h6 === 0 ? "N/A" : manualSample.r3.toFixed(3)}</b>
+                      <span>R4 C2H2/C2H4</span><b className="text-foreground text-right">{manualSample.c2h4 === 0 ? "N/A" : manualSample.r4.toFixed(3)}</b>
+                    </div>
+                    <div className="border-t border-border/30 pt-2 font-mono grid grid-cols-2 gap-x-3 gap-y-1">
+                      <span>CH4</span><b className="text-foreground text-right">{manualSample.pctCh4.toFixed(1)}%</b>
+                      <span>C2H4</span><b className="text-foreground text-right">{manualSample.pctC2h4.toFixed(1)}%</b>
+                      <span>C2H2</span><b className="text-foreground text-right">{manualSample.pctC2h2.toFixed(1)}%</b>
+                    </div>
+                  </div>
+
+                  <div className="h-56 rounded-xl border border-border bg-background/40 p-2">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart margin={{ top: 18, right: 26, bottom: 18, left: 26 }}>
+                        <XAxis type="number" dataKey="x" domain={[0, 100]} hide />
+                        <YAxis type="number" dataKey="y" domain={[0, 90]} hide />
+                        <Tooltip content={<CustomChartTooltip />} />
+                        <Customized component={DuvalTriangleBackground} />
+                        <Scatter data={manualScatterPoint} isAnimationActive={false}>
+                          {manualScatterPoint.map((point) => (
+                            <Cell key="manual-sample" fill={point.color} stroke="white" strokeWidth={2} />
+                          ))}
+                        </Scatter>
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="surface-panel p-3 text-xs leading-relaxed text-muted-foreground">
+                  <span className="label-uppercase block mb-1">Manual Sample Explanation</span>
+                  <p>{manualExplanation.overall.expert}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="alert-warning text-xs">
+                <AlertTriangle size={14} /> Enter valid non-negative gas concentrations to calculate the manual DGA result.
+              </div>
+            )}
+          </div>
           {/* Card 2: Interactive Diagnostic Focus details */}
           <AnimatePresence mode="wait">
             {selectedSample ? (
@@ -1346,3 +1530,10 @@ const DgaFaultAnalysisPage = () => {
 };
 
 export default DgaFaultAnalysisPage;
+
+
+
+
+
+
+
